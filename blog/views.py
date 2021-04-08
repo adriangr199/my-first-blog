@@ -2,6 +2,8 @@ from django.shortcuts import render,get_object_or_404
 from django.utils import timezone
 from .models import Post
 from .forms import PostForm
+from django.shortcuts import redirect
+from django.http import HttpResponse
 
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
@@ -9,6 +11,7 @@ def post_list(request):
 def post_detail(request,pk):
     post= get_object_or_404(Post,pk=pk)
     return render(request, 'blog/post_detail.html',{'post': post})
+
 def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)
@@ -21,6 +24,7 @@ def post_new(request):
     else:
         form = PostForm()
         return render(request, 'blog/post_edit.html', {'form': form})
+
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
@@ -33,4 +37,15 @@ def post_edit(request, pk):
             return redirect('post_detail', pk=post.pk)
     else:
         form = PostForm(instance=post)
-        return render(request, 'blog/post_edit.html', {'form': form})
+    return render(request, 'blog/post_edit.html', {'form': form})
+
+
+def post_translate(request):
+    if request.method== "POST":
+        print(request.POST)
+        response = render(request,'blog/post_translate.html')
+        response.set_cookie('lang',request.POST['language'])
+        print(response.cookies)
+        return response
+    return render(request,'blog/post_translate.html')
+    

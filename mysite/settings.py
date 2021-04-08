@@ -49,6 +49,17 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+#traduccion
+from django.utils.translation import gettext_lazy as _
+LANGUAGES = [
+    ('es-es', _('Español')),
+    ('en-us', _('English'))
+]
+
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale')
+]
+#fin_traduccion
 
 ROOT_URLCONF = 'mysite.urls'
 
