@@ -4,13 +4,16 @@ from .models import Post
 from .forms import PostForm
 from django.shortcuts import redirect
 from django.http import HttpResponse
+from django.utils.translation import gettext as _
 
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
-    return render(request, 'blog/post_list.html', {'posts':posts})
+    title=_('pagina')
+    return render(request, 'blog/post_list.html', {'posts':posts,'title':title})
 def post_detail(request,pk):
     post= get_object_or_404(Post,pk=pk)
-    return render(request, 'blog/post_detail.html',{'post': post})
+    title=_('pagina')
+    return render(request, 'blog/post_detail.html',{'post': post,'title':title})
 
 def post_new(request):
     if request.method == "POST":
@@ -41,11 +44,6 @@ def post_edit(request, pk):
 
 
 def post_translate(request):
-    if request.method== "POST":
-        print(request.POST)
-        response = render(request,'blog/post_translate.html')
-        response.set_cookie('lang',request.POST['language'])
-        print(response.cookies)
-        return response
-    return render(request,'blog/post_translate.html')
+    title=_('pagina')
+    return render(request,'blog/post_translate.html',{'title':title})
     
